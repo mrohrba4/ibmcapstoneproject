@@ -15,37 +15,73 @@
     
     <body>
     <!--Add a nav bar here -->
-    <nav class="nav nav-pills nav-fill">
-        <li class="nav-item">
-            <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp">Home</a>
-        </li>
-        <li class="nav-item">
-        <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/about">About</a>
-        </li>
-        <li class="nav-item">
-        <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/contact">Contact</a>
-        </li>
+    <nav class="nav navbar-nav navbar-left">
+        {% if user.is_authenticated %}
+            <ul>
+                <li class="nav-item">
+                    <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp">Home</a>
+                </li>
+                <li class="nav-item">
+                <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/about">About</a>
+                </li>
+                <li class="nav-item">
+                <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/contact">Contact</a>
+                </li>
+            </ul>
+            <!--Login Form-->
+        {% if user.is_authenticated %}
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}"  method="post">
+                        {% csrf_token %}
+                        <div class="form-group col-auto">
+                            <label for="text1">User</label><br>
+                            <input type="text" class="form-control" id="text1" placeholder="Enter Username"></input>
+                        </div>
 
-        <!--Login Form-->
-        <form class="form-inline" action="{% url 'djangoapp:login' %}"  method="post">
-            {% csrf_token %}
-            <div class="form-group col-auto">
-                <label for="text1">User</label><br>
-                <input type="text" class="form-control" id="text1" placeholder="Enter Username"></input>
-            </div>
+                        <div class="form-group col-auto">
+                            <label for="password1">Password</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Enter Password"></input>
+                        </div>
 
-            <div class="form-group col-auto">
-                <label for="password1">Password</label>
-                <input type="password" class="form-control" id="password1" placeholder="Enter Password"></input>
-            </div>
+                        <button class="form-group col-auto" type="submit" class="btn btn-primary">Submit</button>
+                        <button class="form-group col-auto" type="submit" class="btn btn-primary">Sign Up</button>
 
-            <button class="form-group col-auto" type="submit" class="btn btn-primary">Submit</button>
-            <button class="form-group col-auto" type="submit" class="btn btn-primary">Sign Up</button>
-
-        </form>
+                    </form>
+                </li>
+            </ul>
+        {% endif %}
     <nav>
     <!--Add a dealer table here -->
+    <table>
+        <thead data-filter-control="true">
+            <tr>
+                <th data-field="id">ID</th>
+                <th data-field="full name">Dealer Name</th>
+                <th data-field="city">City</th>
+                <th data-field="address">Address</th>
+                <th data-field="zip">ZIP</th>
+                <th data-field="state" data-filter-control="select">State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dealer in dealership_list %}
+                <tr>
+                    <td>{{dealer.id}}</td>
+                    <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                    <td>{{dealer.address}}</td>
+                    <td>{{dealer.zip}}</td>
+                    <td>{{dealer.state}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     </body>
+    <script>
+        $(function() {
+          $('#table').bootstrapTable()
+        })
+      </script>
 
 </html>

@@ -10,9 +10,67 @@
     <body>
 
     <!--Add a nav bar here -->
+        <nav class="nav navbar-nav navbar-left">
+            {% if user.is_authenticated %}
+                <ul>
+                    <li class="nav-item">
+                        <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                    <a href="https://mrohrba4-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/djangoapp/contact">Contact</a>
+                    </li>
+                </ul>
+                <!--Login Form-->
+            {% if user.is_authenticated %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form class="form-inline" action="{% url 'djangoapp:login' %}"  method="post">
+                            {% csrf_token %}
+                            <div class="form-group col-auto">
+                                <label for="text1">User</label><br>
+                                <input type="text" class="form-control" id="text1" placeholder="Enter Username"></input>
+                            </div>
 
+                            <div class="form-group col-auto">
+                                <label for="password1">Password</label>
+                                <input type="password" class="form-control" id="password1" placeholder="Enter Password"></input>
+                            </div>
+
+                            <button class="form-group col-auto" type="submit" class="btn btn-primary">Submit</button>
+                            <button class="form-group col-auto" type="submit" class="btn btn-primary">Sign Up</button>
+
+                        </form>
+                    </li>
+                </ul>
+            {% endif %}
+        <nav>
     <!-- Add reviews as cards -->
-
+        <div class="card-columns">
+            {% for review in reviews %}
+            <div class="card">
+            
+            {% if review.sentiment == "positive" %}
+                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" width="36px" height="36px"
+                    alt="Sentiment">
+            {% elif review.sentiment == "negative" %}
+                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" width="36px" height="36px"
+                    alt="Sentiment">
+            {% else %}
+                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" width="36px" height="36px"
+                    alt="Sentiment">
+            {% endif %}
+            <div class="card-body bg-light">
+                {% if review.car_make %}
+                    <h5 class="card-title">{{review.car_make}}, {{review.car_model}} </h5>
+                    <h5 class="card-title">{{review.car_year}}</h5>
+                {% endif %}
+                <p class="card-text">{{review.review}}</p>
+            </div>
+            {% endfor %}
+        </div>
     </body>
 
 </html>
